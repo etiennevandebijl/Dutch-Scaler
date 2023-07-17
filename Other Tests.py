@@ -1,8 +1,10 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
 import DutchDraw as DutchDraw
-from DSPI_inverse import DSPI_inverse
+import DutchScaler as DutchScaler
+
 # %% Experiment 1
 '''
 This is some old code. Rho is not integrated here. Also for MK we have 
@@ -156,7 +158,7 @@ for m in [30]:
         results["fp"] = [fp, "*", 0, 0, 0]
         for metric in metrics:
             sm = DutchDraw.measure_score(y_true, y_pred, metric)
-            alpha, thetaopts = DSPI_inverse(y_true, metric, sm)
+            alpha, thetaopts = DutchScaler.optimized_indicator_inverted(y_true, metric, sm)
             TPa = alpha * p + (1 - alpha) * p * thetaopts[0]
             TNa = alpha * (m - p) * thetaopts[0] + (1 - thetaopts[0]) * (m - p)
             results[metric] = [sm, alpha, TPa, TNa, thetaopts[0]]

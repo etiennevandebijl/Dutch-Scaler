@@ -436,7 +436,7 @@ def lower_bound(y_true, measure, beta = 1):
     if measure in measure_dictionary['TS']:
         return P / M
     
-def upper_limit(y_true, measure, rho = 0, beta = 1):
+def upper_bound(y_true, measure, rho = 0, beta = 1):
     """
     This function returns the upper bound of the Dutch Scaler Performance Indicator. 
     An identical value should be obtained with optimized_indicator(y_true, measure, 1.0).
@@ -728,10 +728,10 @@ def optimized_indicator_inverted(y_true, measure, score, rho = 0, beta = 1):
     if baseline['Max Expected Value'] > score:
         raise ValueError("De score must outperform the Dutch Draw.")
 
-    if rho > valid_rho_values(y_true, measure, beta):
+    if rho >= valid_rho_values(y_true, measure, beta):
         raise ValueError("Rho is selected to high to have increasing DSPI.")
 
-    if score > upper_limit(y_true, measure, rho, beta):
+    if score > upper_bound(y_true, measure, rho, beta):
         raise ValueError("The score is above the upper limit.")
 
     P = np.int64(sum(y_true))
@@ -804,13 +804,15 @@ def optimized_indicator_inverted(y_true, measure, score, rho = 0, beta = 1):
             a_2 = (-b - np.sqrt(b * b - 4 * a * c) ) / (2 * a)
             
             answer = False
-            if a_1 >= 0 and a_1 <= 1:
+            if a_1 >= 0 and a_1 <= 1.0001:
                 alpha = a_1
                 answer = True
-            if a_2 >= 0 and a_2 <= 1:
+            if a_2 >= 0 and a_2 <= 1.0001:
                 alpha = a_1
                 answer = True
             if answer == False:
+                print(a_1)
+                print(a_2)
                 raise ValueError("FM PROBLEM")
                 
         return alpha, thetaopts
