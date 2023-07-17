@@ -1,11 +1,17 @@
-import DutchDraw as DutchDraw
-import math
 import numpy as np
+import DutchDraw as DutchDraw
 
 measure_dictionary = DutchDraw.measure_dictionary
 
 def DSPI(y_true, measure, alpha, thetaopts, rho = 0, beta = 1):
     
+    check_measure = False
+    for m in ["PPV", "NPV", "ACC", "BACC", "FBETA", "MCC", "J", "MK", "KAPPA", "FM", "G2", "TS"]:
+        if measure in measure_dictionary[m]:
+            check_measure = True
+    if not check_measure:
+        raise ValueError("The DSPI is not supported for this measure")
+        
     P = np.int64(sum(y_true))
     M = np.int64(len(y_true))
     N = np.int64(M - P)
@@ -22,12 +28,6 @@ def DSPI(y_true, measure, alpha, thetaopts, rho = 0, beta = 1):
     if measure in measure_dictionary['NPV']:
         return TN / (TN + FN)
 
-    if measure in measure_dictionary['FDR']:
-        return FP / (TP + FP)
-
-    if measure in measure_dictionary['FOR']:
-        return FN / (TN + FN)
-
     if measure in measure_dictionary['ACC']:
         return (TP + TN) / M
 
@@ -41,7 +41,7 @@ def DSPI(y_true, measure, alpha, thetaopts, rho = 0, beta = 1):
         return (1 + beta_squared) * TP / (((1 + beta_squared) * TP) + (beta_squared * FN) + FP)
 
     if measure in measure_dictionary['MCC']:
-        return (TP * TN - FP * FN)/(math.sqrt((TP + FP) * (TN + FN) * P * N))
+        return (TP * TN - FP * FN)/(np.sqrt((TP + FP) * (TN + FN) * P * N))
 
     if measure in measure_dictionary['J']:
         TPR = TP / P
@@ -63,7 +63,7 @@ def DSPI(y_true, measure, alpha, thetaopts, rho = 0, beta = 1):
     if measure in measure_dictionary['FM']:
         TPR = TP / P
         PPV = TP / (TP + FP)
-        return math.sqrt(TPR * PPV)
+        return np.sqrt(TPR * PPV)
 
     if measure in measure_dictionary['G2']:
         TPR = TP / P
