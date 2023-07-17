@@ -4,41 +4,11 @@ import DutchDraw as DutchDraw
 
 measure_dictionary = DutchDraw.measure_dictionary
 
-def DSPI_max_rho(y_true, measure, score, beta = 1):
-    '''
-    This function returns the highest possible realized score with the given rho.
-
-    Parameters
-    ----------
-    y_true : TYPE
-        DESCRIPTION.
-    measure : TYPE
-        DESCRIPTION.
-    alpha : TYPE
-        DESCRIPTION.
-    thetaopts : TYPE
-        DESCRIPTION.
-    rho : TYPE
-        DESCRIPTION.
-    beta : TYPE, optional
-        DESCRIPTION. The default is 1.
-
-    Raises
-    ------
-    ValueError
-        DESCRIPTION.
-
-    Returns
-    -------
-    TYPE
-        DESCRIPTION.
-
-    '''
-    
+def DSPI_max_rho(y_true, measure, score, beta = 1):    
     check_measure = False
     for m in ["PPV", "NPV", "ACC", "BACC", "FBETA", "MCC", "J", "MK", "KAPPA", "FM", "G2", "TS"]:
         if measure == "MCC":
-            raise ValueError("The DSPI is not YETT supported for this measure")
+            raise ValueError("The DSPI is not YET supported for this measure")
         if measure in measure_dictionary[m]:
             check_measure = True
     if not check_measure:

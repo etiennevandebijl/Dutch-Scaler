@@ -4,36 +4,7 @@ import DutchDraw as DutchDraw
 measure_dictionary = DutchDraw.measure_dictionary
 
 def DSPI_Upperlimit(y_true, measure, rho, beta = 1):
-    '''
-    This function returns the highest possible realized score with the given rho.
 
-    Parameters
-    ----------
-    y_true : TYPE
-        DESCRIPTION.
-    measure : TYPE
-        DESCRIPTION.
-    alpha : TYPE
-        DESCRIPTION.
-    thetaopts : TYPE
-        DESCRIPTION.
-    rho : TYPE
-        DESCRIPTION.
-    beta : TYPE, optional
-        DESCRIPTION. The default is 1.
-
-    Raises
-    ------
-    ValueError
-        DESCRIPTION.
-
-    Returns
-    -------
-    TYPE
-        DESCRIPTION.
-
-    '''
-    
     check_measure = False
     for m in ["PPV", "NPV", "ACC", "BACC", "FBETA", "MCC", "J", "MK", "KAPPA", "FM", "G2", "TS"]:
         if measure in measure_dictionary[m]:

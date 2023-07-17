@@ -4,35 +4,6 @@ import DutchDraw as DutchDraw
 measure_dictionary = DutchDraw.measure_dictionary
 
 def DSPI_v2(y_true, measure, alpha, rho = 0, beta = 1):
-    '''
-    
-    This function derives the DSPI score without the need to find the optimal 
-    thetaopts.
-
-    Parameters
-    ----------
-    y_true : TYPE
-        DESCRIPTION.
-    alpha : TYPE
-        DESCRIPTION.
-    measure : TYPE
-        DESCRIPTION.
-    rho : TYPE, optional
-        DESCRIPTION. The default is 0.
-    beta : TYPE, optional
-        DESCRIPTION. The default is 1.
-
-    Raises
-    ------
-    ValueError
-        DESCRIPTION.
-
-    Returns
-    -------
-    TYPE
-        DESCRIPTION.
-
-    '''
     measure = measure.upper()
 
     P = np.int64(sum(y_true))
@@ -88,7 +59,8 @@ def DSPI_v2(y_true, measure, alpha, rho = 0, beta = 1):
         else:
             up = alpha * (N - M * rho) + 1
             down = M + N - alpha * N * (1 - M * rho)
-    
+            return up/down
+
     '''
     Open tickets: Derive optimal thetaopts for G2, MCC, MK
     '''

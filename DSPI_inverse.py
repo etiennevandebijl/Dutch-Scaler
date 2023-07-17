@@ -5,36 +5,6 @@ from DSPI_valid_rho import DSPI_valid_rho
 measure_dictionary = DutchDraw.measure_dictionary
 
 def DSPI_inverse(y_true, measure, score, rho = 0, beta = 1):
-    '''
-    This function derives alpha and theta when knowing the realized performance 
-    metric score.
-
-    Parameters
-    ----------
-    y_true : TYPE
-        DESCRIPTION.
-    measure : TYPE
-        DESCRIPTION.
-    score : TYPE
-        DESCRIPTION.
-    rho : TYPE, optional
-        DESCRIPTION. The default is 0.
-    beta : TYPE, optional
-        DESCRIPTION. The default is 1.
-
-    Raises
-    ------
-    ValueError
-        DESCRIPTION.
-
-    Returns
-    -------
-    TYPE
-        DESCRIPTION.
-    TYPE
-        DESCRIPTION.
-
-    '''
     measure = measure.upper()
 
     P = np.int64(sum(y_true))
