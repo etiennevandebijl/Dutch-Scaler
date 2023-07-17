@@ -124,8 +124,19 @@ def DSPI_inverse(y_true, measure, score, rho = 0, beta = 1):
             '''
             Open ticket: Which solution of the following equations is valid?
             '''
-            alpha = (-b + np.sqrt(b * b - 4 * a * c) ) / (2 * a)
-            alpha = (-b - np.sqrt(b * b - 4 * a * c) ) / (2 * a)
+            a_1 = (-b + np.sqrt(b * b - 4 * a * c) ) / (2 * a)
+            a_2 = (-b - np.sqrt(b * b - 4 * a * c) ) / (2 * a)
+            
+            answer = False
+            if a_1 >= 0 and a_1 <= 1:
+                alpha = a_1
+                answer = True
+            if a_2 >= 0 and a_2 <= 1:
+                alpha = a_1
+                answer = True
+            if answer == False:
+                raise ValueError("FM PROBLEM")
+                
         return alpha, thetaopts
 
     if measure in measure_dictionary['MK']:

@@ -41,9 +41,9 @@ plt.show()
 
 M = 40 
 P = 9
-rho = 0
+rho = 0.0
 
-metric_options = ["PPV", "NPV", "ACC", "BACC", "FBETA", "MCC", "J", "MK", "KAPPA", "FM", "TS",]
+metric_options = ["PPV", "NPV", "ACC", "BACC", "FBETA", "MCC", "J", "MK", "KAPPA", "TS", "FM"]
 
 y_true = [1] * P + [0] * (M - P)
 
@@ -62,18 +62,20 @@ plt.figure(figsize = (10,10))
 for metric, group, in df.groupby("Metric"):
     plt.plot(group["Alpha"], group["Score"], label = metric)
 plt.xlabel(r'$\alpha$')
-plt.ylabel(r"DSPI")
+#plt.ylabel(r"DSPI")
+plt.ylabel(r"$\mu_{\alpha}$")
 plt.ylim(0,1)
 plt.legend()
 plt.show()
 
-#%% Plot 2 Scaler
+#%% Plot 2 Scaler Directly
 
 M = 40 
-P = 9
-rho = 0
+P = 3
+rho = 0.05
 
 metric_options = ["PPV", "NPV", "ACC", "BACC", "FBETA", "J", "KAPPA", "FM", "TS"]
+#metric_options = ["FBETA"]
 
 y_true = [1] * P + [0] * (M - P)
 
@@ -82,7 +84,7 @@ for metric in metric_options:
     UB = DSPI_Upperlimit(y_true, metric, rho)
     LB = DSPI_Lowerlimit(y_true, metric)
     for alpha in np.linspace(0,1): 
-        score = DSPI_v2(y_true, metric, alpha)
+        score = DSPI_v2(y_true, metric, alpha, rho)
         score_scaled = (score - LB) / (UB - LB)
         results.append([metric, M, P, rho, alpha, score_scaled])
 
@@ -91,19 +93,87 @@ df = pd.DataFrame(results, columns = ["Metric", "M", "P", "rho", "Alpha", "Score
 plt.figure(figsize = (10,10))
 for metric, group, in df.groupby("Metric"):
     plt.plot(group["Alpha"], group["Score"], label = metric)
+plt.ylabel(r'$\frac{\mu_\alpha - \mu_0}{\mu_1 - \mu_0}$')
 plt.xlabel(r'$\alpha$')
-plt.ylabel(r"DSPI")
+plt.xlim(0,1)
 plt.ylim(0,1)
+plt.show()
+
+# %% Plot 3 Scaler Indirectly
+
+M = 40 
+P = 3
+rho = 0.04
+
+metric_options = ["PPV", "NPV", "ACC", "BACC", "FBETA", "MCC", "J", "MK", "KAPPA", "TS", "FM"]
+#metric_options = ["FBETA"]
+
+y_true = [1] * P + [0] * (M - P)
+
+results = []
+for metric in metric_options:
+    UB = DSPI_Upperlimit(y_true, metric, rho)
+    LB = DSPI_Lowerlimit(y_true, metric)
+    for s in np.linspace(LB, UB): 
+        alpha, thetaopts = DSPI_inverse(y_true, metric, s, rho)
+        score = DSPI(y_true, metric, alpha, thetaopts, rho)
+        score_scaled = (score - LB) / (UB - LB)
+        results.append([metric, M, P, rho, alpha, score_scaled])
+
+df = pd.DataFrame(results, columns = ["Metric", "M", "P", "rho", "Alpha", "Score"])
+
+plt.figure(figsize = (10,10))
+for metric, group, in df.groupby("Metric"):
+    plt.plot(group["Alpha"], group["Score"], label = metric)
+plt.ylabel(r'$\frac{\mu_\alpha - \mu_0}{\mu_1 - \mu_0}$')
+plt.xlabel(r'$\alpha$')
 plt.legend()
+plt.xlim(0,1)
+plt.ylim(0,1)
+plt.show()
+
+# %% plot 4 Effect Rho
+
+M = 10 
+P = 4
+
+metric = "FM"
+
+y_true = [1] * P + [0] * (M - P)
+
+results = []
+
+upper_rho = DSPI_valid_rho(y_true, metric)
+for rho in np.linspace(0, upper_rho, 10)[:-1]:
+    UB = DSPI_Upperlimit(y_true, metric, rho)
+    LB = DSPI_Lowerlimit(y_true, metric)
+    for alpha in np.linspace(0,1): 
+        score = DSPI_v2(y_true, metric, alpha, rho)
+        score_scaled = (score - LB) / (UB - LB)
+        results.append([M, P, rho, alpha, score, score_scaled])
+
+df = pd.DataFrame(results, columns = ["M", "P", "rho", "Alpha", "Score", "Scaled-Score"])
+
+plt.figure(figsize = (10,10))
+for r, group, in df.groupby("rho"):
+    plt.plot(group["Alpha"], group["Score"], label = r)
+plt.ylabel(r'$\mu_\alpha$')
+plt.xlabel(r'$\alpha$')
+plt.legend()
+plt.xlim(0,1)
+plt.ylim(0,1)
 plt.show()
 
 
-
-
-
-
-
-
+plt.figure(figsize = (10,10))
+for r, group, in df.groupby("rho"):
+    plt.plot(group["Alpha"], group["Scaled-Score"], label = r)
+plt.ylabel(r'$\frac{\mu_\alpha - \mu_0}{\mu_1 - \mu_0}$')
+plt.xlabel(r'$\alpha$')
+plt.legend()
+plt.xlim(0,1)
+plt.ylim(0,1)
+plt.show()
 
 
 

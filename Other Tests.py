@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import DutchDraw as DutchDraw
+from DSPI_inverse import DSPI_inverse
 # %% Experiment 1
 '''
 This is some old code. Rho is not integrated here. Also for MK we have 
@@ -131,3 +132,35 @@ plt.xlabel("Alpha")
 plt.ylabel("G^2_alpha")
 plt.legend()
 plt.show()
+
+# %% Experiment 5
+'''
+The idea behind this experiment was to test is identical alpha's for all metrics would be given for a single prediction.
+This was not the case.
+'''
+
+metrics = ["PPV", "NPV", "ACC", "BACC", "FBETA", "MCC", "J", "MK", "KAPPA", "FM", "TS", "G2"]
+
+for m in [30]:
+    for p in [5]:
+        y_true = [1] * p + [0] * (m - p)
+        random_flip = np.random.rand(m)
+        y_pred = [1 - x if z < 0.05 else x for x, z in zip(y_true, random_flip)]
+        
+        tp = DutchDraw.measure_score(y_true, y_pred, "TP")
+        tn = DutchDraw.measure_score(y_true, y_pred, "TN")
+        fp = DutchDraw.measure_score(y_true, y_pred, "FP")
+        fn = DutchDraw.measure_score(y_true, y_pred, "FN")
+        results = {"tp": [tp, "*", p, 0, 1], "tn": [tn, "*", 0, (m - p), 0]}
+        results["fn"] = [fn, "*", 0, 0, 1]
+        results["fp"] = [fp, "*", 0, 0, 0]
+        for metric in metrics:
+            sm = DutchDraw.measure_score(y_true, y_pred, metric)
+            alpha, thetaopts = DSPI_inverse(y_true, metric, sm)
+            TPa = alpha * p + (1 - alpha) * p * thetaopts[0]
+            TNa = alpha * (m - p) * thetaopts[0] + (1 - thetaopts[0]) * (m - p)
+            results[metric] = [sm, alpha, TPa, TNa, thetaopts[0]]
+            
+df = pd.DataFrame(results).T
+df.columns = ["Score", "Alpha", "TPa", "TNa", "Thetaopt"]
+print(df)
