@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from DSPI_v2 import DSPI_v2
 from DSPI_valid_rho import DSPI_valid_rho
 from DSPI_Upperlimit import DSPI_Upperlimit
+from DSPI_Lowerlimit import DSPI_Lowerlimit
 from DSPI_inverse import DSPI_inverse
 from DSPI import DSPI
 import DutchDraw as DutchDraw
@@ -36,13 +37,13 @@ plt.ylabel(r'$F_\beta$')
 plt.legend()
 plt.show()
 
-# %%
+# %% Plot 1
 
 M = 40 
 P = 9
 rho = 0
 
-metric_options = ["PPV", "NPV", "ACC", "BACC", "FBETA", "MCC", "J", "MK", "KAPPA", "FM", "TS"]
+metric_options = ["PPV", "NPV", "ACC", "BACC", "FBETA", "MCC", "J", "MK", "KAPPA", "FM", "TS",]
 
 y_true = [1] * P + [0] * (M - P)
 
@@ -66,13 +67,43 @@ plt.ylim(0,1)
 plt.legend()
 plt.show()
 
+#%% Plot 2 Scaler
 
-#%% 
+M = 40 
+P = 9
+rho = 0
+
+metric_options = ["PPV", "NPV", "ACC", "BACC", "FBETA", "J", "KAPPA", "FM", "TS"]
+
+y_true = [1] * P + [0] * (M - P)
+
+results = []
+for metric in metric_options:
+    UB = DSPI_Upperlimit(y_true, metric, rho)
+    LB = DSPI_Lowerlimit(y_true, metric)
+    for alpha in np.linspace(0,1): 
+        score = DSPI_v2(y_true, metric, alpha)
+        score_scaled = (score - LB) / (UB - LB)
+        results.append([metric, M, P, rho, alpha, score_scaled])
+
+df = pd.DataFrame(results, columns = ["Metric", "M", "P", "rho", "Alpha", "Score"])
+
 plt.figure(figsize = (10,10))
 for metric, group, in df.groupby("Metric"):
-    group["Scaled-Score"] = (group["Score"] - group["Score"].min()) / (1 - group["Score"].min())
-    plt.plot(group["Alpha"], group["Scaled-Score"], label = metric)
-plt.xlabel("Alpha")
-plt.ylabel("(Score - DDB) / (1 - DDB)")
+    plt.plot(group["Alpha"], group["Score"], label = metric)
+plt.xlabel(r'$\alpha$')
+plt.ylabel(r"DSPI")
+plt.ylim(0,1)
 plt.legend()
 plt.show()
+
+
+
+
+
+
+
+
+
+
+
