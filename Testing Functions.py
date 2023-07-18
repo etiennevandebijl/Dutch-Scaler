@@ -6,7 +6,7 @@ import DutchScaler as DutchScaler
 
 #%% Check Function 1
 
-#Excluded: G2, FM
+#Excluded: G2
 metric_options = ["PPV", "NPV", "ACC", "BACC", "FBETA", "MCC", "J", "MK", "KAPPA", "TS", "FM"]
 
 results = []
@@ -31,7 +31,7 @@ df["Diff v1"] = np.abs(df["Score"] - df["Score_v1"])
 
 #%% Check Function 1 and 2
 
-#Excluded: G2, MCC, MK, FM
+#Excluded: G2, MCC, MK
 metric_options = ["PPV", "NPV", "ACC", "BACC", "FBETA", "J", "KAPPA", "TS", "FM"]
 
 results = []
