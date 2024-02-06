@@ -8,9 +8,9 @@ import DutchScaler as DutchScaler
 # %% Plot 1 Experiment different Beta values
 
 # Settings
-M = 40 
-P = 3
-rho = 0
+M = 100 
+P = 10
+rho = 0.0
 
 metric = "FBETA"
 
@@ -34,11 +34,12 @@ plt.show()
 
 # %% Plot 2 Scaler
 
-M = 40 
-P = 9
+M = 100 
+P = 10
 rho = 0.0
 
-metric_options = ["PPV", "NPV", "ACC", "BACC", "FBETA", "MCC", "J", "MK", "KAPPA", "TS", "FM"]
+metric_options = ["ACC", "BACC", "FBETA",  "FM", "G2",  "J", "KAPPA", "MCC", "MK", "NPV", "PPV",     "TS"]
+#metric_options = ["BACC", "J", "PPV", "NPV"]
 
 y_true = [1] * P + [0] * (M - P)
 
@@ -65,17 +66,17 @@ plt.show()
 
 # %% Plot 3 Scaler Scaled Directly
 
-M = 40 
-P = 3
-rho = 0.05
+M = 100 
+P = 10
+rho = 0.0
 
 metric_options = ["PPV", "NPV", "ACC", "BACC", "FBETA", "J", "KAPPA", "FM", "TS"]
-#metric_options = ["FBETA"]
 
 y_true = [1] * P + [0] * (M - P)
 
 results = []
 for metric in metric_options:
+    print(metric)
     UB = DutchScaler.upper_bound(y_true, metric, rho)
     LB = DutchScaler.lower_bound(y_true, metric)
     for alpha in np.linspace(0,1): 
@@ -96,9 +97,9 @@ plt.show()
 
 # %% Plot 4 Scaler Scaled Indirectly
 
-M = 40 
-P = 3
-rho = 0.04
+M = 100
+P = 10
+rho = 0.05
 
 metric_options = ["PPV", "NPV", "ACC", "BACC", "FBETA", "MCC", "J", "MK", "KAPPA", "TS", "FM"]
 #metric_options = ["FBETA"]
@@ -132,7 +133,7 @@ plt.show()
 M = 10 
 P = 4
 
-metric = "FM"
+metric = "MCC"
 
 y_true = [1] * P + [0] * (M - P)
 

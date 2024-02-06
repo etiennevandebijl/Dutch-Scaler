@@ -186,7 +186,7 @@ def optimized_indicator(y_true, measure, alpha, rho = 0, beta = 1):
         if measure in measure_dictionary[m]:
             check_measure = True
     if not check_measure:
-        raise ValueError("No closed-form expression without thetaopts is supported for the given meeasure")
+        raise ValueError("No closed-form expression without thetaopts is supported for the given measure")
         
     # convert np.array to list
     if isinstance(y_true, np.ndarray):
