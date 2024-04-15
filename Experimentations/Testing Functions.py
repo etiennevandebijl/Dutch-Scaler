@@ -14,6 +14,7 @@ results = []
 for M in [10, 30, 50]:
     for P in range(1, M):
         y_true = [1] * P + [0] * (M - P)
+
         for metric in metric_options:
             upper_rho = DutchScaler.valid_rho_values(y_true, metric)
             for rho in np.linspace(0, upper_rho, 5)[:-1]:
@@ -27,7 +28,6 @@ for M in [10, 30, 50]:
 df = pd.DataFrame(results, columns = ["Metric", "M", "P", "Baseline", "Upper Bound", "rho", "alpha", "Score", "Score_v1"])
 
 df["Diff v1"] = np.abs(df["Score"] - df["Score_v1"])
-
 
 #%% Check Function 1 and 2
 

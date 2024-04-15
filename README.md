@@ -1,4 +1,4 @@
-# The DutchScaler package
+# The Dutch Scaler Performance Indicator package
 
 DutchScaler is a soon-to-be Python package for a performance indicator.
 
@@ -10,9 +10,6 @@ This package implements the ideas from `The Dutch Scaler Performance Indicator: 
 
 If you have used the DutchDraw package, please also cite: (Coming soon)
 
-## Installation
-
-TO DO: Use the package manager [pip](https://pip.pypa.io/en/stable/) to install the package
 
 ## License
 

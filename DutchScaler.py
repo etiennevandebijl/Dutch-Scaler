@@ -1,8 +1,8 @@
-# %%
 import numpy as np
 import DutchDraw as DutchDraw
 
 # %%
+
 measure_dictionary = DutchDraw.measure_dictionary
 
 def indicator_score(y_true, measure, alpha, thetaopts, rho = 0, beta = 1):
