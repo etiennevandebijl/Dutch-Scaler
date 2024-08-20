@@ -431,7 +431,7 @@ def lower_bound(y_true, measure, beta = 1):
         return 0
     
     if measure in measure_dictionary['FM']:
-        return np.sqrt(P/M)
+        return np.sqrt(P / M)
     
     if measure in measure_dictionary['TS']:
         return P / M
@@ -472,9 +472,6 @@ def upper_bound(y_true, measure, rho = 0, beta = 1):
     
     Example:
     --------
-        TO DO
-    
-        Open Ticket: The G2 is programatic.
     """
     measure = measure.upper()
     
@@ -500,7 +497,6 @@ def upper_bound(y_true, measure, rho = 0, beta = 1):
     P = np.int64(sum(y_true))
     M = np.int64(len(y_true))
     N = np.int64(M - P)
-    
     
     if measure in measure_dictionary['PPV']:
         return P * (1 - rho) / ( rho * (N - P) + P)
@@ -586,7 +582,7 @@ def select_rho(y_true, measure, max_score, beta = 1):
     --------
         TO DO
     
-        Open Ticket: The MCC is programatic.
+        Open Ticket: The MCC is problamatic.
     """
     
     measure = measure.upper()
