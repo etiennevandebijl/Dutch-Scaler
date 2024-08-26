@@ -34,6 +34,7 @@ df['ACCBAR (Delta) Ranked'] = df["ACCBAR (Delta)"].rank(ascending=False)
 df['DSPI (Alpha) Ranked'] = df['DSPI (Alpha)'].rank(ascending=False)
 df["ACCBAR (Delta) Scaled"] = (df["Accuracy"] - df["Baseline"]) / (1 - df["Baseline"])
 
+df = df.sort_values("Accuracy Ranked")
 
 # %% Visualize performance
 
@@ -52,11 +53,20 @@ for columns, offset in zip(columns_to_plot, dodge_offsets):
         ax.bar(pos + offset, df[col], bottom=bottom, width=bar_width, align='edge', label=col)
         bottom += df[col]
 ax.set_xticks(pos)
-ax.set_xticklabels(df['Nr'], rotation=0)
+
 ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05),
           ncol=4, fancybox=True, shadow=True)
 plt.ylabel("Score")
-plt.xlabel("Study")
+
+# Idea 1
+# ax.set_xticklabels(df['Nr'], rotation=0)
+# plt.xlabel("Study")
+
+
+ax.set_xticklabels(np.arange(1, df.shape[0] + 1), rotation=0)
+plt.xlabel("Study (Ranked by Accuracy)")
+
 plt.tight_layout()
+plt.savefig("/home/etienne/Dropbox/Projects/The Dutch Scaler Performance Indicator How much did my model actually learn/Results/DSPI-ACCBAR on accuracy.png")
 plt.show()
 
