@@ -12,34 +12,35 @@ import DutchDraw as DutchDraw
 Gürol Canbek, Tugba Taskata Temizel, and Seref Sagiroglu, “Binary-Classification Performance Evaluation Reporting Survey Data with the Findings”, 
 Mendeley Data, v3, 2020, http://dx.doi.org/10.17632/5c442vbjzg.3
 '''
-df = pd.read_csv("/home/etienne/Dropbox/Projects/The Dutch Scaler Performance Indicator How much did my model actually learn/Data/Survey_Classification_Performance_Evaluation_And_Reporting_78_Studies_Table_4_Overview_Subset_F1.csv")
+df = pd.read_csv("/home/etienne/Dropbox/Projects/The Dutch Scaler Performance Indicator How much did my model actually learn/Data/Survey_Classification_Performance_Evaluation_And_Reporting_78_Studies_Table_4_Overview.csv")
 
-# %% Determine Dutch Draw Baseline and the Dutch Scaler Performance Indicator
-
+# %%  Determine Dutch Draw Baseline and the Dutch Scaler Performance Indicator
+ 
 dutchscaler_alphas = []
 baselines = []
 for index, row in df.iterrows():
     y_true = [1] * int(row["P"]) + [0] * int(row["N"])
-    bs = DutchDraw.DutchDraw_baseline(y_true, "FBETA")["Max Expected Value"]
+    bs = DutchDraw.DutchDraw_baseline(y_true, "Accuracy")["Max Expected Value"]
     baselines.append(bs)
-    alpha, _ = DutchScaler.optimized_indicator_inverted(y_true, "FBETA", row["F1"])
+    alpha, _ = DutchScaler.optimized_indicator_inverted(y_true, "Accuracy", row["Accuracy"])
     dutchscaler_alphas.append(alpha)
 
-df["DDB"] = baselines
-df["ACCBAR (Delta)"] = df["F1"] - baselines
+df["DD baseline"] = baselines
+df["ACCBAR (Delta)"] = df["Accuracy"] - baselines
 df["DSPI (Alpha)"] = dutchscaler_alphas
 
-df['Accuracy Ranked'] = df["F1"].rank(ascending=False)
+df['Accuracy Ranked'] = df["Accuracy"].rank(ascending=False)
 df['ACCBAR (Delta) Ranked'] = df["ACCBAR (Delta)"].rank(ascending=False)
 df['DSPI (Alpha) Ranked'] = df['DSPI (Alpha)'].rank(ascending=False)
-df["ACCBAR (Delta) Scaled"] = (df["F1"] - df["DDB"]) / (1 - df["DDB"])
+df["ACCBAR (Delta) Scaled"] = (df["Accuracy"] - df["DD baseline"]) / (1 - df["DD baseline"])
 
 df = df.sort_values("Accuracy Ranked")
 
-# %%
-columns_to_plot = [ ["DDB", "ACCBAR (Delta)"], "ACCBAR (Delta) Scaled", "DSPI (Alpha)"]
+# %% Visualize performance
 
-fig, ax = plt.subplots(figsize=(10, 6))
+columns_to_plot = [ ["DD baseline", "ACCBAR (Delta)"], "ACCBAR (Delta) Scaled", "DSPI (Alpha)" ]
+
+fig, ax = plt.subplots(figsize=(10, 5))
 
 bar_spots = len(columns_to_plot)
 bar_width = 0.8 / bar_spots
@@ -57,17 +58,15 @@ ax.legend(loc='upper center', bbox_to_anchor=(0.5, 1.05),
           ncol=4, fancybox=True, shadow=True)
 plt.ylabel("Score")
 
-
 # Idea 1
 # ax.set_xticklabels(df['Nr'], rotation=0)
 # plt.xlabel("Study")
 
 
 ax.set_xticklabels(np.arange(1, df.shape[0] + 1), rotation=0)
-plt.xlabel(r"Study (Ranked by $F_1$)")
+plt.xlabel("Study (Ranked by Accuracy)")
 
 plt.tight_layout()
-plt.savefig("/home/etienne/Dropbox/Projects/The Dutch Scaler Performance Indicator How much did my model actually learn/Results/DSPI-ACCBAR on f1.png")
-
+plt.savefig("/home/etienne/Dropbox/Projects/The Dutch Scaler Performance Indicator How much did my model actually learn/Results/DSPI-ACCBAR on accuracy.png")
 plt.show()
 

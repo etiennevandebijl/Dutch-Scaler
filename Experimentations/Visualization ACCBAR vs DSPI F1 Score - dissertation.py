@@ -25,19 +25,19 @@ for index, row in df.iterrows():
     alpha, _ = DutchScaler.optimized_indicator_inverted(y_true, "FBETA", row["F1"])
     dutchscaler_alphas.append(alpha)
 
-df["DDB"] = baselines
+df["DD baseline"] = baselines
 df["ACCBAR (Delta)"] = df["F1"] - baselines
 df["DSPI (Alpha)"] = dutchscaler_alphas
 
 df['Accuracy Ranked'] = df["F1"].rank(ascending=False)
 df['ACCBAR (Delta) Ranked'] = df["ACCBAR (Delta)"].rank(ascending=False)
 df['DSPI (Alpha) Ranked'] = df['DSPI (Alpha)'].rank(ascending=False)
-df["ACCBAR (Delta) Scaled"] = (df["F1"] - df["DDB"]) / (1 - df["DDB"])
+df["ACCBAR (Delta) Scaled"] = (df["F1"] - df["DD baseline"]) / (1 - df["DD baseline"])
 
 df = df.sort_values("Accuracy Ranked")
 
 # %%
-columns_to_plot = [ ["DDB", "ACCBAR (Delta)"], "ACCBAR (Delta) Scaled", "DSPI (Alpha)"]
+columns_to_plot = [ ["DD baseline", "ACCBAR (Delta)"], "ACCBAR (Delta) Scaled", "DSPI (Alpha)"]
 
 fig, ax = plt.subplots(figsize=(10, 6))
 
@@ -67,7 +67,7 @@ ax.set_xticklabels(np.arange(1, df.shape[0] + 1), rotation=0)
 plt.xlabel(r"Study (Ranked by $F_1$)")
 
 plt.tight_layout()
-plt.savefig("/home/etienne/Dropbox/Projects/The Dutch Scaler Performance Indicator How much did my model actually learn/Results/DSPI-ACCBAR on f1.png")
+plt.savefig("/home/etienne/Dropbox/Projects/The Dutch Scaler Performance Indicator How much did my model actually learn/Results/DSPI-ACCBAR on f1 - dissertation.png")
 
 plt.show()
 

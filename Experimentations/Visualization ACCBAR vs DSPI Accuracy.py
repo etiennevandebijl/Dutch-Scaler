@@ -25,20 +25,20 @@ for index, row in df.iterrows():
     alpha, _ = DutchScaler.optimized_indicator_inverted(y_true, "Accuracy", row["Accuracy"])
     dutchscaler_alphas.append(alpha)
 
-df["Baseline"] = baselines
+df["DDB"] = baselines
 df["ACCBAR (Delta)"] = df["Accuracy"] - baselines
 df["DSPI (Alpha)"] = dutchscaler_alphas
 
 df['Accuracy Ranked'] = df["Accuracy"].rank(ascending=False)
 df['ACCBAR (Delta) Ranked'] = df["ACCBAR (Delta)"].rank(ascending=False)
 df['DSPI (Alpha) Ranked'] = df['DSPI (Alpha)'].rank(ascending=False)
-df["ACCBAR (Delta) Scaled"] = (df["Accuracy"] - df["Baseline"]) / (1 - df["Baseline"])
+df["ACCBAR (Delta) Scaled"] = (df["Accuracy"] - df["DDB"]) / (1 - df["DDB"])
 
 df = df.sort_values("Accuracy Ranked")
 
 # %% Visualize performance
 
-columns_to_plot = [ ["Baseline", "ACCBAR (Delta)"], "ACCBAR (Delta) Scaled", "DSPI (Alpha)" ]
+columns_to_plot = [ ["DDB", "ACCBAR (Delta)"], "ACCBAR (Delta) Scaled", "DSPI (Alpha)" ]
 
 fig, ax = plt.subplots(figsize=(10, 5))
 
