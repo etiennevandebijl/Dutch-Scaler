@@ -23,7 +23,7 @@ print('')
 ######################################################
 # Example function: find rho given score 0.95
 
-print('$rho$: {:06.4f}'.format(dutchscaler.select_rho(y_true,  measure= 'FBETA', 0.95, beta = 2)))
+print('$rho$: {:06.4f}'.format(dutchscaler.select_rho(y_true,  measure= 'FBETA', max_score = 0.95, beta = 2)))
 
 
 ######################################################
