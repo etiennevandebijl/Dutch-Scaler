@@ -200,7 +200,7 @@ def plot_and_save_3(df_a, df_b, df_c):
    # fig.tight_layout()
    
     plt.savefig(path + "Dutch-Scaler-Figure-1.png", bbox_inches="tight")
-    
+    plt.savefig(path + "Dutch-Scaler-Figure-1.eps", format='eps', bbox_inches="tight")
     plt.show()
     
 # %%

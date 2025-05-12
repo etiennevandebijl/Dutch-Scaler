@@ -66,8 +66,10 @@ plt.ylabel("Score")
 ax.set_xticklabels(np.arange(1, df.shape[0] + 1), rotation=0)
 plt.xlabel(r"Study (Ranked by $F_1$)")
 
-plt.tight_layout()
-plt.savefig("/home/etienne/Dropbox/Projects/The Dutch Scaler Performance Indicator How much did my model actually learn/Results/DSPI-ACCBAR on f1 - dissertation.png")
-
+# plt.tight_layout()
+# plt.savefig("/home/etienne/Dropbox/Projects/The Dutch Scaler Performance Indicator How much did my model actually learn/Results/DSPI-ACCBAR on f1 - dissertation.png")
+plt.savefig("/home/etienne/Dropbox/Projects/Proefschrift/Figures/DSPI-ACCBAR on f1.eps", format='eps', bbox_inches="tight")
 plt.show()
 
+
+# %%
